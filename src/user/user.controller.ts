@@ -4,6 +4,7 @@ import {
   Post,
   Body,
   Param,
+  Query,
   Put,
   Delete,
 } from '@nestjs/common';
@@ -14,12 +15,20 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
-  findAll() {
+  findAll(@Query() query: any) {
     return this.userService.findAll();
   }
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(Number(id));
+  findOne(@Param() params: any) {
+    return this.userService.findOne(params.id);
+  }
+  @Get()
+  searchUsers(@Query('name') name: string, @Query('email') email: string) {
+    return `Searching users with name: ${name} and email: ${email}`;
+  }
+  @Get(':id/profile')
+  getUserProfile(@Param('id') id: string, @Query('expand') expand: string) {
+    return `User profile for ID: ${id} with expand option: ${expand}`;
   }
   @Post()
   create(@Body() data: CreateUserDto) {
