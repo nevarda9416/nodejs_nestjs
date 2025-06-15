@@ -4,22 +4,32 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskModule } from './task/task.module';
 import { UserModule } from './user/user.module';
-
+import { BullModule } from '@nestjs/bull';
+import { AudioProcessor } from './audio/audio.processor';
 @Module({
   controllers: [AppController],
-  providers: [AppService],
   imports: [
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'audio',
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'admin',
+      password: '',
       database: 'nestjs',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
     TaskModule,
     UserModule,
   ],
+  providers: [AppService, AudioProcessor],
 })
 export class AppModule {}
