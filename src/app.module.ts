@@ -2,11 +2,20 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
+import { BullModule } from '@nestjs/bull';
+import { AudioProcessor } from './audio/audio.processor';
 @Module({
   controllers: [AppController],
-  providers: [AppService],
   imports: [
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'audio',
+    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -17,5 +26,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
   ],
+  providers: [AppService, AudioProcessor],
 })
 export class AppModule {}
