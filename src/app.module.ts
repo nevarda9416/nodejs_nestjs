@@ -4,9 +4,11 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BullModule } from '@nestjs/bull';
 import { AudioProcessor } from './audio/audio.processor';
+import { AuthModule } from './auth/auth.module';
 @Module({
   controllers: [AppController],
   imports: [
+    AuthModule,
     BullModule.forRoot({
       redis: {
         host: 'localhost',

@@ -16,7 +16,6 @@ async function bootstrap() {
       transform: true, // auto convert data type (ex: string => number)
     }),
   );
-  await app.listen(4000);
   // Request validation
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.use(requestIp.mw());

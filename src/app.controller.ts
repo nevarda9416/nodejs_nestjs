@@ -10,12 +10,11 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  // @Roles(Role.Admin)
   getHello(): string {
     return this.appService.getHello();
   }
 
-  @Roles('admin')
+  @Roles(Role.Admin)
   @Get('dashboard')
   getDashboard(): string {
     return 'This is the admin dashboard';
